@@ -1,11 +1,13 @@
 # Support-Requests
 A cloud based Ruby on Rails app for customer support system
 
+working example [https://request-support.herokuapp.com/](https://request-support.herokuapp.com/)
+
 ## Requirements
 
-Rails 
-Ruby
-react-rails
+- Rails 
+- Ruby
+- react-rails
 
 run the following commands to install components and gems
 bundle install 
