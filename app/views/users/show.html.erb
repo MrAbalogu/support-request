@@ -1,0 +1,59 @@
+<div class="col-md-6">
+  <%= form_for [@user, @user.requests.build] do |f| %>
+    <div class="form-group">
+    <%= f.label :title %>
+    <%= f.text_field :title, class: "form-control" %>
+    </div>
+    <div class="form-group">
+    <%= f.label :description %>
+    <%= f.text_area :description, class: "form-control" %>
+    </div>
+    <%= f.submit 'submit', class: "btn btn-primary" %>
+  <% end %>
+</div>
+<div class="col-md-6">
+  <h2>Previous Requests</h2>
+  <table class="table">
+    <thead>
+    </thead>
+    <tbody>
+      <% @requests.each do |r| %>
+      <tr>
+        <% if r.user_id == @user.id %>
+        <td><%= r.title %></td>
+        <td><%= r.description %></td>
+        <td><%= r.status? ? "\u2713" : "\u2717"  %></td>
+        <td><%= link_to "Show", request_path(r) %></td>
+        <% end %>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<script>
+var firefoxTestDone = false
+function reportFirefoxTestResult(result) {
+  if (!firefoxTestDone) {
+    $('#ff-bug-test-result')
+      .addClass(result ? 'text-success' : 'text-danger')
+      .text(result ? 'PASS' : 'FAIL')  
+  }
+  firefoxTestDone = true
+}
+
+$(function () {
+  $('.js-popover').popover()
+  $('.js-tooltip').tooltip()
+  $('#tall-toggle').click(function () {
+    $('#tall').toggle()
+  })
+  $('#ff-bug-input').one('focus', function () {
+    $('#myModal2').on('focus', function () {
+      reportFirefoxTestResult(false)
+    })
+    $('#ff-bug-input').on('focus', function () {
+      reportFirefoxTestResult(true)
+    })
+  })
+})
+</script>

@@ -1,0 +1,149 @@
+var HeaderNav = React.createClass({
+	render () {
+		return (
+			<div>
+				<div className="col-md-6">
+				<RequestForm />
+				</div>
+				<div className="col-md-6">
+				<PreviousRequests className="col-md-6"/>
+				</div>
+			</div>
+		);
+	}
+}); 
+
+var PreviousRequests = React.createClass({
+	getInitialState() {
+		return {showMe: false};
+	},
+	onClick() {
+		this.setState({ showMe: true });
+	},
+	render () {
+		if (this.state.showMe){
+			return (
+				<div>
+				<ol className="breadcrumb text-center">
+					<li><a onClick={this.onClick} >Check your previous requests</a></li>;
+				</ol>
+				<RequestBox url="/requests.json"/>
+				</div>
+			);
+		} else {
+			return (
+				<ol className="breadcrumb text-center">
+					<li><a onClick={this.onClick} >Check your previous requests</a></li>;
+				</ol>
+			);
+		}
+	}
+});
+
+var RequestBox = React.createClass({
+	getInitialState() {
+		return {requests: []};
+	},
+	componentDidMount() {
+		this.loadCommentsFromServer();
+	},
+	loadRequestsFromServer() {
+		$.ajax({
+			url: this.props.url,
+			datatype: 'json',
+			success: function(requests) {
+				this.setState({requests: requests});
+			}.bind(this),
+			error: function(xhr, status, err) {
+				console.error(this.props.url, status, err.toString());
+			}.bind(this)
+		});
+	}, 
+	handleRequestSubmit(request) {
+		var requests = this.state.requests;
+		var newRequests = requests.concat([request]);
+		this.setState ({requests: newRequests});
+		$.ajax({
+			url: this.props.url,
+			dataType: 'json',
+			type: 'POST',
+			data: {"request": request},
+			success: function(data) {
+				this.loadRequestsFromServer();
+			}.bind(this),
+			error: function(xhr, status, err) {
+				console.error(this.props.url, status, err.toString());
+			}.bind(this)
+		});
+	},
+	render() {
+		return (
+			<div>
+			<RequestList requests={this.state.comments} />
+			<RequestForm onRequestSubmit={this.handleRequestSubmit} />
+			</div>
+		);
+	}
+});
+
+var RequestList = React.createClass({
+	render() {
+		var requestNodes = this.props.requests.map(function(request, index){
+			return (
+				<Request title={request.title} description={request.description} key={index} />
+			);
+		});
+	}
+});
+
+var Request = React.createClass({
+	render() {
+		return (
+			<div className="request">
+	        <h2 className="requestTitle">
+	          {this.props.title}
+	        </h2>
+	          {this.props.description}
+	      </div>
+		);
+	}
+});
+
+var RequestForm = React.createClass({
+	getInitialState() {
+		return {showMe: false};
+	},
+	onClick() {
+		this.setState({ showMe: true });
+	},
+	handleSubmit() {
+		var title = this.ref.title.findDOMNode().value.trim();
+		var description = this.ref.description.findDOMNode.value.trim();
+		this.props.onRequestSubmit({title: title, description: description});
+		this.ref.title.findDOMNode().value = '';
+		this.ref.description.findDOMNode().value = '';
+		return false;
+	},
+	render () {
+		if (this.state.showMe){
+			return (
+				<div>
+				<ol className="breadcrumb text-center">
+					<li className="active" ><a onClick={this.onClick}> Submit a request</a></li>
+				</ol>
+				<form className="requestForm" onSubmit={this.handleSubmit}>
+			    	<input className="form-control" type="text" placeholder="Your title" ref="title" />
+			        <input className="form-control" type="text" placeholder="Say something..." ref="description" />
+			        <input className="form-control" type="submit" value="Post" />
+			    </form>
+			    </div>
+			);
+		} else {
+			return (
+				<ol className="breadcrumb text-center">
+					<li className="active" ><a onClick={this.onClick}> Submit a request</a></li>
+				</ol>
+			);
+		}
+	}
+});

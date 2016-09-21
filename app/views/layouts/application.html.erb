@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TickettingSystem</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+  	<nav class="navbar navbar-default navbar-static-top">
+		<div class="container">
+			<% if logged_in? %>
+			<a href="/home" class="navbar-brand">Customer Support</a>
+			<% else %>
+			<a href="/login" class="navbar-brand">Customer Support</a>
+			<% end %>
+			<ul class="nav navbar-nav">
+				<% if logged_in? %>
+				<li class="active"> <%= link_to "Log out", logout_path, method: "delete" %></li>
+				<li><%= link_to 'profile', current_user %></li>
+				<% else %>
+				<li class="active"><a href="/login"> Login </a></li>
+				<% end %>
+			</ul>
+		</div>
+	</nav>	
+    <%= yield %>
+  </body>
+</html>

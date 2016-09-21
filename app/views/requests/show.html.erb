@@ -1,0 +1,78 @@
+<div class="col-md-6">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        </button>
+        <h4 class="modal-title"><%= @request.title %></h4>
+        <button type="button" class="btn btn-default float-right" data-toggle="modal" data-target="#myModal"> Edit </button>
+        <button type="button" class="btn btn-warning float-right" data-toggle="modal" data-target="#myModal1"> Close Issue </button>
+      </div>
+      <div class="modal-body">
+        <p><%= @request.description %></p>
+      </div>
+      <div class="col-md-12">
+      <h5>Comments</h5>
+      	<%= form_for [@request, @request.comments.build] do |f| %>
+      	<%= f.text_field :name %>
+      </div>
+      <div class="col-md-12">
+      	<%= f.text_area :body  %><br>
+      	<%= f.submit %>
+      	<% end %>
+      </div>
+      <% @request.comments.each do |c| %>
+      <div class="col-md-12">
+      	<hr>
+      	<%= c.name %><br>
+      	<%= c.body %>
+      	<hr>
+      </div>	
+      <% end %>
+      <div class="modal-footer">
+      </div>
+    </div><!-- /.modal-content -->
+
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	    <div class="modal-dialog">
+	      <div class="modal-content">
+  		    <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	          <h4 class="modal-title" id="myModalLabel">Edit Issue</h4>
+	        </div>
+	        <div class="container">
+		        <%= form_for @request do |f| %>
+		        	<div class="form-group col-xs-3 row">
+		        	<%= f.text_field :title, class: "form-control" %>
+		        	</div>
+		        	<div class="form-group col-xs-3 row">
+		        	<%= f.text_area :description, class: "form-control" %>
+		            </div>
+		    </div>
+	        <div class="modal-footer">
+	        		<%= f.submit 'Update', class: 'btn btn-default btn-xs' %>
+	        	<% end %>
+	        </div>
+          </div>
+        </div>
+    </div>
+    <div id="myModal1" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+	    <div class="modal-dialog">
+	      <div class="modal-content">
+  		    <div class="modal-header">
+	          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+	          <h4 class="modal-title" id="myModalLabel">Close Issue</h4>
+	        </div>
+	        <div class="container">
+		        <%= form_for @request do |f| %>
+		        	<div class="col-xs-3">
+		        	<%= f.check_box :status, class: "form-control" %> 
+		        	</div>
+		    </div>
+	        <div class="modal-footer">
+	        	    <%= f.submit 'Update', class: 'btn btn-default btn-xs' %>
+	        	<% end %>
+	        </div>
+          </div>
+        </div>
+    </div>
+</div>
