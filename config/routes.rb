@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   post   'login'   => 'sessions#create'
   delete 'logout'  => 'sessions#destroy'
   get    '/home'   => 'users#home'
-  root   'users#index'
+  root   'users#new'
   
   resources :requests
   resources :users
